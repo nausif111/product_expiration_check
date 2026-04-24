@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block head %}
+{% endblock %}
+
+{% block content %}
+<div class="overflow-x-auto mt-20">
+    <table class="min-w-full border-collapse border border-gray-200">
+        <thead class="bg-gray-100">
+            <tr>
+                <!-- <th class="border-b px-6 py-3 text-left">ID</th> -->
+                <th class="border-b px-6 py-3 text-left">Product Name</th>
+                <th class="border-b px-6 py-3 text-left">Expiration Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr class="hover:bg-gray-50 transition">
+                <!-- <td class="border-b px-6 py-4">{{ product.id }}</td> -->
+                <!-- Inline edit enabled for name -->
+                <td class="border-b px-6 py-4 outline-none focus:bg-green-50" contenteditable="true"
+                    onblur="saveData('{{ product.id }}', 'name', this.innerText)">
+                    {{ product.name }}
+                </td>
+                <td class="border-b px-6 py-4">
+                    <input type="date" value="{{ product.expiration_date }}"
+                        class="bg-transparent outline-none focus:bg-green-50 rounded px-1 cursor-pointer"
+                        onchange="saveData('{{ product.id }}', 'expiration_date', this.value)">
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" class="px-6 py-10 text-center text-gray-500">
+                    No products found. Add one above!
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function saveData(productId, field, newValue) {
+        fetch('/update-expired-product', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id: productId,
+                field: field,
+                value: newValue
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Update saved');
+                } else {
+                    alert('Error saving change');
+                }
+            })
+            .catch(err => console.error('Fetch error:', err));
+    }
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Product Expiry Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-white shadow-sm border-b border-gray-200 py-4 px-6 mb-8">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <a href="/"
+                class="flex items-center gap-2 text-green-600 font-bold text-xl hover:text-green-700 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>ExpiryGuard</span>
+            </a>
+
+            {% if current_user.is_authenticated %}
+            <div class="flex items-center gap-4">
+                <span class="text-sm text-gray-500 hidden sm:inline">Logged in as <b>{{ current_user.username
+                        }}</b></span>
+                <a href="{{ url_for('logout') }}"
+                    class="bg-red-50 hover:bg-red-100 text-red-600 px-4 py-2 rounded-lg text-sm font-semibold transition">
+                    Logout
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-6 pb-12">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div
+            class="mb-6 p-4 rounded-lg shadow-sm border {{ 'bg-green-50 border-green-200 text-green-700' if category == 'success' else 'bg-red-50 border-red-200 text-red-700' }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+</body>
+
+</html>
