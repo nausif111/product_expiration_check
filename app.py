@@ -2,7 +2,10 @@ import os
 from datetime import datetime
 from flask import Flask, redirect, render_template, jsonify, request, url_for, flash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from dotenv import load_dotenv
 from models import db, User, Product # Importing from our new models.py
+
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(os.getcwd(), 'checkproductexpiration.db')
@@ -117,9 +120,11 @@ def add_product():
 with app.app_context():
     db.create_all()
     # Create a test user if one doesn't exist
-    if not User.query.filter_by(username='admin').first():
-        test_user = User(username='admin')
-        test_user.set_password('admin123')
+    admin_username = os.getenv('ADMIN_USERNAME', 'admin')
+    admin_password = os.getenv('ADMIN_PASSWORD', 'admin123')
+    if not User.query.filter_by(username=admin_username).first():
+        test_user = User(username=admin_username)
+        test_user.set_password(admin_password)
         db.session.add(test_user)
         db.session.commit()
 

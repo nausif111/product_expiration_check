@@ -47,10 +47,17 @@ Then open: `http://127.0.0.1:5000`
 
 ## 🔐 Default login
 
-- Username: `admin`
-- Password: `admin123`
+The app creates an admin user from your `.env` file:
 
-> The app creates this test user automatically on first run.
+- Username: `ADMIN_USERNAME` (default: `admin`)
+- Password: `ADMIN_PASSWORD` (default: `admin123`)
+
+> Create a `.env` file in the project root with your own credentials:
+>
+> ```env
+> ADMIN_USERNAME=your_username
+> ADMIN_PASSWORD=your_secure_password
+> ```
 
 ## 📁 Important files
 
