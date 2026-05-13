@@ -60,6 +60,20 @@ def view_expired_products():
     # Pass them to the template as a variable named 'products'
     return render_template('view_expired_products.html', products=all_products)
 
+@app.route('/viewcurrentmonthexpiredproducts', methods=['GET'])
+@login_required
+def view_current_month_expired_products():
+    current_month = datetime.now().month
+    current_year = datetime.now().year
+    # all_products = Product.query.order_by(Product.expiration_date.asc()).all()
+    # current_month_products = [p for p in all_products if p.expiration_date.month == current_month and p.expiration_date.year == current_year]
+    current_month_products = Product.query.filter(
+        db.extract('month', Product.expiration_date) == current_month,
+        db.extract('year', Product.expiration_date) == current_year
+    ).order_by(Product.expiration_date.asc()).all()
+    # Pass them to the template as a variable named 'products'
+    return render_template('view_current_month_expired_products.html', products=current_month_products)
+
 
 @app.route('/update-expired-product', methods=['POST'])
 @login_required

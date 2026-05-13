@@ -76,6 +76,8 @@ The app creates an admin user from your `.env` file:
 - `/viewexpiredproducts` — list products and edit them
 - `/add_product` — POST route to add a product
 - `/update-expired-product` — POST route to save inline edits
+- `/viewcurrentmonthexpiredproducts` — GET route to fetch current month products about to expire
+
 
 ## 💡 Notes
 
